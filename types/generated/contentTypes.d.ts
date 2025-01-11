@@ -362,6 +362,49 @@ export interface AdminUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiArtigoArtigo extends Schema.CollectionType {
+  collectionName: 'artigos';
+  info: {
+    displayName: 'Artigos';
+    pluralName: 'artigos';
+    singularName: 'artigo';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    categorias: Attribute.Relation<
+      'api::artigo.artigo',
+      'oneToMany',
+      'api::categoria.categoria'
+    >;
+    conteudo: Attribute.RichText & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::artigo.artigo',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    imagem: Attribute.Media<'images'>;
+    publishedAt: Attribute.DateTime;
+    resumo: Attribute.Text;
+    titulo: Attribute.String &
+      Attribute.Required &
+      Attribute.Unique &
+      Attribute.SetMinMaxLength<{
+        maxLength: 65;
+      }>;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::artigo.artigo',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiCategoriaCategoria extends Schema.CollectionType {
   collectionName: 'categorias';
   info: {
@@ -373,6 +416,11 @@ export interface ApiCategoriaCategoria extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
+    artigo: Attribute.Relation<
+      'api::categoria.categoria',
+      'manyToOne',
+      'api::artigo.artigo'
+    >;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::categoria.categoria',
@@ -829,6 +877,7 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::artigo.artigo': ApiArtigoArtigo;
       'api::categoria.categoria': ApiCategoriaCategoria;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

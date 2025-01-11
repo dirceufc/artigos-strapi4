@@ -18,6 +18,12 @@
     },
     "descricao": {
       "type": "text"
+    },
+    "artigo": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::artigo.artigo",
+      "inversedBy": "categorias"
     }
   }
 }
